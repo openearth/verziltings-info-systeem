@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html lang="en"> 
+<head> 
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+    <title>WWA story creator</title> 
+    
+    <link href="form.css" rel="stylesheet"/>
+</head> 
+<body> 
+    <div style="display:none">
+         <fieldset id="page_template" name="page">
+            <legend></legend>
+             <label>Title(optional):</label><input type="text" name="title"><br>
+             <label>Story:</label><textarea maxlength="256" placeholder="This is my story" rows="4" cols="50"></textarea><br>
+             <label>Data:</label><input type="file" name="data"><br>
+             <label>Location(optional):</label><input type="text" name="location"><br>
+             <label>URL(optional):</label><input type="text" name="URL"><br>
+        </fieldset>
+    </div>
+   
+    <form action="" method="post">
+           
+    <fieldset id="document">
+        <h2>Upload uw document</h2>
+        <label for="creator">Uw naam</label>
+        <input type="text" name="creator">
+        <label for="title">Document titel</label>
+        <input type="text" name="title">
+        <label for="project">In kader van welk project?</label>
+        <input type="text" name="project">
+        <label for="author">Auteur</label>
+        <input type="text" name="author">
+        <label for="type">Document Type</label>
+        <select name="type" id="typeSelect">
+            <option value="pdf">Adobe </option>
+            <option value="docx">Word document</option>
+            <option value="ptt">Powerpoint file</option>
+        </select>
+        <label for="waterbody">Waterlichaam connectie</label>
+        <select name="waterbody">
+            <option value="RWS_ID_1">lichaam 1</option>
+            <option value="RWS_ID_2">lichaam 2</option>
+            <option value="RWS_ID_3">lichaam 3</option>
+            <option value="RWS_ID_4">lichaam 4</option>
+            <option value="RWS_ID_5">etc.</option>
+        </select>
+        <label for="document">Upload document</label>
+        <input type="file" name="document">
+    </fieldset>
+         <button type="submit">Upload file</button>
+    </form>    
+</body> 
+</html>

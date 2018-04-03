@@ -5,6 +5,39 @@
     <title>WWA story creator</title> 
     
     <link href="form.css" rel="stylesheet"/>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    
+    
+    <script>
+        function callback(data)
+        {
+            console.log(data)
+        }
+        
+        $(document).ready( function() {
+            $('#document_upload').submit(function(evt) {
+                evt.preventDefault();
+                
+                var formContent = $(this).serialize();
+                var formAction = $(this).attr('action');
+                var formSubmitType = $(this).attr('method');
+
+                $.ajax({
+                    data: formContent,
+                    url: formAction,
+                    type: formSubmitType,
+                    success: callback
+                });
+
+                return false; // prevent form from submitting
+            });
+        });
+    </script>
+    
 </head> 
 <body> 
     <div style="display:none">
@@ -18,7 +51,7 @@
         </fieldset>
     </div>
    
-    <form action="" method="post">
+    <form id="document_upload" action="../php/verzilting.php" method="post">
            
     <fieldset id="document">
         <h2>Upload uw document</h2>
@@ -46,8 +79,9 @@
         </select>
         <label for="document">Upload document</label>
         <input type="file" name="document">
+        <input hidden value="true" name="submit"/>
     </fieldset>
-         <button type="submit">Upload file</button>
+         <button type="submit">Upload</button>
     </form>    
 </body> 
 </html>

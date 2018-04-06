@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
-    <title>WWA story creator</title> 
+    <title>Verzilting doucment upload</title> 
     
     <link href="form.css" rel="stylesheet"/>
     <script
@@ -22,7 +22,7 @@
             $('#document_upload').submit(function(evt) {
                 evt.preventDefault();
                 
-                var formContent = $(this).serialize();
+                var formContent = new FormData($(this)[0]);           
                 var formAction = $(this).attr('action');
                 var formSubmitType = $(this).attr('method');
 
@@ -30,7 +30,10 @@
                     data: formContent,
                     url: formAction,
                     type: formSubmitType,
-                    success: callback
+                    success: callback,
+                    cache: false,
+                    contentType: false,
+                    processData: false
                 });
 
                 return false; // prevent form from submitting
@@ -63,12 +66,6 @@
         <input type="text" name="project">
         <label for="author">Auteur</label>
         <input type="text" name="author">
-        <label for="type">Document Type</label>
-        <select name="type" id="typeSelect">
-            <option value="pdf">Adobe </option>
-            <option value="docx">Word document</option>
-            <option value="ptt">Powerpoint file</option>
-        </select>
         <label for="waterbody">Waterlichaam connectie</label>
         <select name="waterbody">
             <option value="RWS_ID_1">lichaam 1</option>

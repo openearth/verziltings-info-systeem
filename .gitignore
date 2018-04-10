@@ -1,0 +1,7 @@
+/Viewer/node_modules/
+/Viewer/npm-debug.log*
+/Viewer/yarn-debug.log*
+/Viewer/yarn-error.log*
+/Viewer/test/unit/coverage
+/Viewer/test/e2e/reports
+/Viewer/selenium-debug.log

@@ -1,6 +1,7 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors',1);
+//error_reporting(-1);
+//ini_set('display_errors', 'On');
+ cors();
 /*
 * php database manager
 * Deltares, Matthijs Schaap, 4-2018
@@ -9,8 +10,8 @@ ini_set('display_errors',1);
 * queries database for documents with area
 */
 
-//If submit == true we have data from the form
 if(isset($_POST['submit'])){
+
     $db = new Dbase;
     $postData = $_POST;
     $uploadDir = "D:/Applications/Webserver/Apache24/htdocs/verzilting/files/";
@@ -18,13 +19,11 @@ if(isset($_POST['submit'])){
         
     //save document
     if ( 0 < $_FILES['document']['error'] ) {
-        echo 'Error: ' . $_FILES['file']['error'] . '<br>';
-        die;
-    }
-    if(!isset ($_FILES['document']["name"]))
-    {
-        echo 'Error: No File uploaded <br>';
-        die;
+        if(!isset ($_FILES['document']["name"]))
+        {
+            throw new Exception("No File uploaded");
+        }
+        throw new Exception('Failed with error code ' . $_FILES['document']['error']);
     }
     
     $target_fileName = basename($_FILES["document"]["name"]);
@@ -36,9 +35,7 @@ if(isset($_POST['submit'])){
        $fileType != "pdf" &&
        $fileType != "ppt" &&
        $fileType != "pptx") {
-        echo "You tried to upload a ".$fileType."-file. ";
-        echo "However only DOC, DOCX, PDF, PPT & PPTX files are allowed.";
-        die;
+        throw new Exception("You tried to upload a ".$fileType."-file. Only DOC, DOCX, PDF, PPT & PPTX files are allowed");
     }
     
     //should move uploaded file, but since that does not work, we use copy
@@ -47,14 +44,11 @@ if(isset($_POST['submit'])){
          $postData["type"] = $fileType;
         //add to database    
         $db -> sqlite_addDocumentToDb($postData, "files/" . $target_fileName);
-
-        //all is well
-        echo $target_fileName.' was uploaded successfully';
     }
     else
     {
-        echo $tmp_dir . basename($_FILES["document"]["tmp_name"]);
-        echo 'Failed to move uploaded file:'. $target_fileName .'<br>';
+         echo $tmp_dir . basename($_FILES["document"]["tmp_name"]);
+         throw new Exception('Failed to move uploaded file:'. $target_fileName );
     }
 }
 
@@ -62,9 +56,7 @@ if(isset($_POST['submit'])){
 if(isset($_GET['function']) && $_GET['function'] === "getDocumentsByWaterbodyId"){
     
     $db = new Dbase;
-    
     echo json_encode($db->sqlite_fetchEntiesByArea($_GET["id"]));
-    
 }
 
     
@@ -80,9 +72,11 @@ class Dbase {
         id INTEGER PRIMARY KEY,
         Date created INTEGER,
         Creator TEXT,
+        Organisation TEXT,
         Format TEXT,
         Title TEXT,
         Authors TEXT,
+        Abstract TEXT,
         Project TEXT,
         Waterbody TEXT,
         Link TEXT
@@ -93,9 +87,11 @@ class Dbase {
         $addEntry = "INSERT INTO ". $this->tableName." (
              Date,
              Creator,
+             Organisation,
              Format,
              Title,
              Authors,
+             Abstract,
              Project,
              Waterbody,
              Link
@@ -104,9 +100,11 @@ class Dbase {
          (
          ".time().",
          '".$this->test_input($document['creator'])."',
+         '".$this->test_input($document['organisation'])."',
          '".$this->test_input($document['type'])."',
          '".$this->test_input($document['title'])."',
          '".$this->test_input($document['author'])."',
+         '".$this->test_input($document['abstract'])."',
          '".$this->test_input($document['project'])."',
          '".$this->test_input($document['waterbody'])."',
          '".$link."'
@@ -161,5 +159,32 @@ class Dbase {
       $data = htmlspecialchars($data);
       return $data;
     }
+}
+
+function cors() {
+
+    // Allow from any origin
+    if (isset($_SERVER['HTTP_ORIGIN'])) {
+        // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
+        // you want to allow, and if so:
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    }
+
+    // Access-Control headers are received during OPTIONS requests
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+            // may also be using PUT, PATCH, HEAD etc
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+        exit(0);
+    }
+
+    //echo "You have CORS!";
 }
 ?> 

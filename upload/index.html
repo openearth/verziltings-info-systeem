@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
-    <title>Verzilting doucment upload</title> 
+    <title>Verzilting document upload</title> 
     
     <link href="form.css" rel="stylesheet"/>
     <script
@@ -10,12 +10,16 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous">
     </script>
+    <!-- script
+        src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js">
+    </script -->
     
     
     <script>
         function callback(data)
         {
             console.log(data)
+            $("#document_upload")[0].reset();
         }
         
         $(document).ready( function() {
@@ -29,10 +33,10 @@
                 $.ajax({
                     data: formContent,
                     url: formAction,
-                    type: formSubmitType,
+                    method: formSubmitType,
                     success: callback,
                     cache: false,
-                    contentType: false,
+                    ContentType: false,
                     processData: false
                 });
 
@@ -43,29 +47,27 @@
     
 </head> 
 <body> 
-    <div style="display:none">
-         <fieldset id="page_template" name="page">
-            <legend></legend>
-             <label>Title(optional):</label><input type="text" name="title"><br>
-             <label>Story:</label><textarea maxlength="256" placeholder="This is my story" rows="4" cols="50"></textarea><br>
-             <label>Data:</label><input type="file" name="data"><br>
-             <label>Location(optional):</label><input type="text" name="location"><br>
-             <label>URL(optional):</label><input type="text" name="URL"><br>
-        </fieldset>
-    </div>
-   
-    <form id="document_upload" action="../php/verzilting.php" method="post">
+    <form id="document_upload" action="../php/verzilting.php" method="POST">
            
     <fieldset id="document">
         <h2>Upload uw document</h2>
+        <p>
+            Dit formulier staat toe een document toe te voegen aan de verzilting app.
+            Uw naam en organisatie zijn bedoelt om een aanspreekpunt te hebben mochten er vragen zijn.
+            Uw naam en organisatie worden niet publiekelijk weergegeven in de site zelf.
+        </p>
         <label for="creator">Uw naam</label>
-        <input type="text" name="creator">
+        <input type="text" name="creator"/>
+        <label for="organisation">Uw Organisatie</label>
+        <input type="text" name="organisation"/>
         <label for="title">Document titel</label>
-        <input type="text" name="title">
+        <input type="text" name="title"/>
         <label for="project">In kader van welk project?</label>
-        <input type="text" name="project">
+        <input type="text" name="project"/>
         <label for="author">Auteur</label>
-        <input type="text" name="author">
+        <input type="text" name="author"/>
+        <label for="abstract">De eerste paar zinnen of een korte beschrijving van de inhoud</label>
+        <textarea type="textbox" name="abstract"></textarea>
         <label for="waterbody">Waterlichaam connectie</label>
         <select name="waterbody">
             <option value="RWS_ID_1">lichaam 1</option>

@@ -1,28 +1,26 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<html lang="en"> 
-<head> 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
-    <title>Verzilting doucment upload</title> 
-    
-    <link href="form.css" rel="stylesheet"/>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Verzilting doucment upload</title>
+
     <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous">
     </script>
-    
-    
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
     <script>
         function callback(data)
         {
             console.log(data)
         }
-        
+
         $(document).ready( function() {
             $('#document_upload').submit(function(evt) {
                 evt.preventDefault();
-                
-                var formContent = new FormData($(this)[0]);           
+
+                var formContent = new FormData($(this)[0]);
                 var formAction = $(this).attr('action');
                 var formSubmitType = $(this).attr('method');
 
@@ -40,9 +38,14 @@
             });
         });
     </script>
-    
-</head> 
-<body> 
+
+
+    <link href="form.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css'/>
+
+</head>
+<body>
     <div style="display:none">
          <fieldset id="page_template" name="page">
             <legend></legend>
@@ -53,9 +56,9 @@
              <label>URL(optional):</label><input type="text" name="URL"><br>
         </fieldset>
     </div>
-   
+
     <form id="document_upload" action="../php/verzilting.php" method="post">
-           
+
     <fieldset id="document">
         <h2>Upload uw document</h2>
         <label for="creator">Uw naam</label>
@@ -67,18 +70,17 @@
         <label for="author">Auteur</label>
         <input type="text" name="author">
         <label for="waterbody">Waterlichaam connectie</label>
-        <select name="waterbody">
-            <option value="RWS_ID_1">lichaam 1</option>
-            <option value="RWS_ID_2">lichaam 2</option>
-            <option value="RWS_ID_3">lichaam 3</option>
-            <option value="RWS_ID_4">lichaam 4</option>
-            <option value="RWS_ID_5">etc.</option>
-        </select>
+        <div id="select-waterbody-map">
+          <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+          <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
+          <script src='select-waterbody-map.js'></script>
+        </div>
+        <input hidden name="waterbody">
         <label for="document">Upload document</label>
         <input type="file" name="document">
         <input hidden value="true" name="submit"/>
     </fieldset>
          <button type="submit">Upload</button>
-    </form>    
-</body> 
+    </form>
+</body>
 </html>

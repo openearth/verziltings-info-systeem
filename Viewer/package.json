@@ -1,0 +1,34 @@
+{
+  "name": "verziltingstool",
+  "version": "1.0.0",
+  "description": "Verziltingstool to view documents available for waterbodies in the Netherlands",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "verziltings-info-systeem"
+  },
+  "keywords": [
+    "Verziltingstool"
+  ],
+  "author": "Cindy van de Vries",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "mocha": "^5.0.5"
+  },
+  "devDependencies": {
+    "connect": "^3.6.6",
+    "gulp-cli": "^2.0.1",
+    "serve-static": "^1.13.2",
+    "wdio-mocha-framework": "^0.5.13",
+    "wdio-phantomjs-service": "^0.2.2",
+    "wdio-selenium-standalone-service": "0.0.10",
+    "webdriverio": "^4.12.0"
+  }
+}

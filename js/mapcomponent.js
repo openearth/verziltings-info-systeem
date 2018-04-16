@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://d01518:8080/verzilting/'
+const SERVER_URL = 'http://al-ng033.xtr.deltares.nl/verzilting'
 
 // create mapbox component
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2FtdmR2cmllcyIsImEiOiJjajA4NXdpNmswMDB2MzNzMjk4dGM2cnhzIn0.lIwd8N7wf0hx7mq-kjTcbQ';

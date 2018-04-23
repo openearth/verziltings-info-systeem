@@ -2,32 +2,44 @@
 <html>
 
 <head>
-  <meta charset='utf-8' />
-  <title>Display a map</title>
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Verziltingstool</title>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
 
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css'/>
+  <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+  <header>
+    <h3 id='title'>Verziltingstool</h3>
+    <button id='uploadbutton' title="Upload your document here" onclick="window.open('http://al-ng033.xtr.deltares.nl/verzilting/upload/', '_blank')" class='btn'>
+     <i class='fa fa-upload'></i>
+   </button>
+    <div id='legend'>
+      <span id='waterbody-legend' class='colored-span'></span>
+      <label> Waterlichaam </label>
+    </div>
+    <div id='legend'>
+      <span id='selected-legend' class='colored-span'></span>
+      <label> Geselecteerd Waterlichaam </label>
+    </div>
+  </header>
   <div id='map'>
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
     <script src='js/mapcomponent.js'></script>
-  </div>
-
-  <div id='documents'>
-    <h3 id='document-title'> </h3>
-    <table id="results" class="table table-hover">
-      <thead>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div id='documents'>
+      <h3 id='document-title'> </h3>
+      <div id='results'></div>
+      <script src='js/collapsible.js'></script>
+    </div>
   </div>
 </body>
 

@@ -21,7 +21,7 @@ map.on('load', function(e) {
     'type': 'fill',
     'source': {
       'type': 'geojson',
-      'data': './waterlichamen_43260.geojson'
+      'data': 'https://raw.githubusercontent.com/openearth/verziltings-info-systeem/master/waterlichamen_43260.geojson'
     },
     'layout': {},
     'paint': {
@@ -35,7 +35,7 @@ map.on('load', function(e) {
     'type': 'line',
     'source': {
       'type': 'geojson',
-      'data': './waterlichamen_43260.geojson'
+      'data': 'https://raw.githubusercontent.com/openearth/verziltings-info-systeem/master/waterlichamen_43260.geojson'
     },
     'layout': {},
     'paint': {

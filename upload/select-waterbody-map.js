@@ -20,7 +20,7 @@ map.on('load', function(e) {
     'type': 'fill',
     'source': {
       'type': 'geojson',
-      'data': './waterlichamen_43260.geojson'
+      'data': '../waterlichamen_43260.geojson'
     },
     'layout': {},
     'paint': {
@@ -34,7 +34,7 @@ map.on('load', function(e) {
     'type': 'line',
     'source': {
       'type': 'geojson',
-      'data': './waterlichamen_43260.geojson'
+      'data': '../waterlichamen_43260.geojson'
     },
     'layout': {},
     'paint': {

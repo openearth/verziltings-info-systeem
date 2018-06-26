@@ -62,7 +62,7 @@ if(isset($_POST)){
             $base64FormData = rtrim( strtr( base64_encode( json_encode($postData) ), '+/', '-_'), '=');
             //we will send and email with the form data plain to check and link with encrypted data to click to enter into database
 
-            $to      = 'shp@deltares.nl; Willem.Stolte@deltares.nl';
+            $to      = 'shp@deltares.nl, Willem.Stolte@deltares.nl';
             $subject = 'Verzilting app: Nieuwe upload';
             $message = 'Beste Admin'. "\r\n"
                 . "Er is een nieuwe upload klaar voor inspectie. Hieronder ziet u een overzicht van de informatie in deze upload:" . "\r\n" 
@@ -70,9 +70,9 @@ if(isset($_POST)){
                 . "Uploader: ". $postData['creator'] . "\r\n" 
                 . "Organisatie: ". $postData['organisation'] . "\r\n" 
                 . "Titel: ". $postData['title'] . "\r\n" 
-                . "Auteur". $postData['author'] . "\r\n" 
-                . "Samenvatting". $postData['abstract'] . "\r\n" 
-                . "Projectnaam". $postData['project'] . "\r\n" 
+                . "Auteur: ". $postData['author'] . "\r\n" 
+                . "Samenvatting: ". $postData['abstract'] . "\r\n" 
+                . "Projectnaam: ". $postData['project'] . "\r\n" 
                 . "Type: ". $postData['type'] . "\r\n" 
                 . "Waterlichaam id: ". $postData['waterbody'] . "\r\n" 
                 . "Document: " ."files/" . $postData['url'] . "\r\n" 

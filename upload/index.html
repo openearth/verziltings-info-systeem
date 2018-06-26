@@ -38,6 +38,9 @@
                     $('#document_upload input[name='+name+']').val(json[name]);
                 }
                 
+                $('#document_upload input[name=document_url]').val(json['url']);
+                $('#file_upload_input').hide();
+                $('#file_upload_url').show();
                 console.log(json);
             }
                         
@@ -107,8 +110,14 @@
           <script src='select-waterbody-map.js'></script>
         </div>
         <input type="text" id="waterbody" name="waterbody" readonly style="border:none;"/>
-        <label for="document">Upload document</label>
-        <input id="input_file" type="file" name="document">
+        <div id="file_upload_input">
+            <label for="document">Upload document</label>
+            <input id="input_file" type="file" name="document">
+        </div>
+        <div id="file_upload_url" hidden>
+            <label for="document_url">Uploaded document</label>
+            <input type="text" name="document_url">
+        </div>
         <input hidden value="" name="pass"/>
     </fieldset>
          <button type="submit">Upload</button>

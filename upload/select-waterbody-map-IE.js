@@ -14,7 +14,7 @@ if (!mapboxgl.supported()){
   style.on('ready', function(e) {
     var waterbodies = L.mapbox.featureLayer().addTo(map);
     var waterbodiesoutline = L.mapbox.featureLayer().addTo(map);
-    $.getJSON(SERVER_URL + 'waterlichamen_43260.geojson', function(data) {
+    $.getJSON('../waterlichamen_43260.geojson', function(data) {
           waterbodiesoutline.setGeoJSON(data)
           waterbodiesoutline.setStyle(
             {

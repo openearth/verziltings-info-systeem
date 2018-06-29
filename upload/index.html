@@ -22,26 +22,60 @@
         }
 
         $(document).ready( function() {
+            
+            var url = new URL(window.location);
+            var formData = url.searchParams.get("data");
+            
+            if (formData && formData.length > 0)
+            {
+                var json = JSON.parse(atob(formData));
+                for (name in json)
+                {
+                    $('#document_upload input[name='+name+']').val(json[name]);
+                }
+                
+                $('#document_upload input[name=document_url]').val(json['url']);
+                $('#file_upload_input').hide();
+                $('#file_upload_url').show();
+                console.log(json);
+            }
+                        
             $('#document_upload').submit(function(evt) {
                 evt.preventDefault();
-
-                var formContent = new FormData($(this)[0]);
+                
+                var formContent = new FormData(this);
                 var formAction = $(this).attr('action');
                 var formSubmitType = $(this).attr('method');
-
-                $.ajax({
-                    data: formContent,
-                    url: formAction,
-                    method: formSubmitType,
-                    success: callback,
-                    cache: false,
-                    ContentType: false,
-                    processData: false
-                });
+                
+                var request = new XMLHttpRequest();
+                request.open("POST", formAction);
+                request.send(formContent);
+                
+                request.onload = function()
+                {
+                    if (request.status == 200) {
+                        $("form").hide();
+                        $("#succes").show();
+                    }
+                    else
+                    {
+                        $("form").hide();
+                        console.log(e);
+                        $("#failed p").html(error)
+                        $("#failed").show();
+                    }
+                }
 
                 return false; // prevent form from submitting
             });
-        });
+            $('#try-again').click( function()
+            {
+               $("#failed").hide();
+               $("form").show();
+                return false;
+            })
+                                  
+        });    
     </script>
 </head>
 <body>
@@ -49,7 +83,7 @@
     <fieldset id="document">
         <h2>Upload uw document</h2>
         <p>
-            Dit formulier staat toe een document toe te voegen aan de verzilting app.
+            Dit formulier staat toe een document toe te voegen aan de kennisbank verzilting.
             Uw naam en organisatie zijn bedoelt om een aanspreekpunt te hebben mochten er vragen zijn.
             Uw naam en organisatie worden niet publiekelijk weergegeven in de site zelf.
         </p>
@@ -63,10 +97,10 @@
         <input type="text" name="project"/>
         <label for="author">Auteur</label>
         <input type="text" name="author"/>
-        <label for="abstract">De eerste paar zinnen of een korte beschrijving van de inhoud</label>
+        <label for="abstract">Een korte omschrijving in maximaal 4 zinnen</label>
         <textarea type="textbox" name="abstract"></textarea>
-        <label for="waterbody">Waterlichaam connectie</label>
-        <div id="select-waterbody-map">
+        <label for="waterbody-map">Waterlichaam connectie</label>
+        <div name="waterbody-map" id="select-waterbody-map">
           <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
           <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
           <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
@@ -74,12 +108,32 @@
           <script src='select-waterbody-map.js'></script>
           <script src='select-waterbody-map-IE.js'></script>
         </div>
-        <input hidden name="waterbody">
-        <label for="document">Upload document</label>
-        <input type="file" name="document">
-        <input hidden value="true" name="submit"/>
+        <input type="text" id="waterbody" name="waterbody" readonly style="border:none;"/>
+        <div id="file_upload_input">
+            <label for="document">Upload document</label>
+            <input id="input_file" type="file" name="document">
+        </div>
+        <div id="file_upload_url" hidden>
+            <label for="document_url">Uploaded document</label>
+            <input type="text" name="document_url">
+        </div>
+        <input hidden value="" name="pass"/>
     </fieldset>
          <button type="submit">Upload</button>
     </form>
+    <div id="succes" style="display:none">
+        <h2>Success: uw document is toegevoegd in de kennisbank</h2>
+        <p>
+            Wilt u nog een document-uploaden?
+            <a href=".">Upload nog een document</a>
+        </p>
+    </div>
+    <div id="failed" style="display:none">
+        <h2>Helaas is er iets fout gegaan in het proces.</h2>
+        <p>
+            
+        </p>
+        <a href="#" id="try-again">Probeer nog een keer</a>
+    </div>
 </body>
 </html>

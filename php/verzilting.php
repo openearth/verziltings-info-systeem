@@ -1,28 +1,31 @@
 <?php
-//error_reporting(-1);
-//ini_set('display_errors', 'On');
+error_reporting(-1);
+ini_set('display_errors', 'On');
  cors();
 /*
 * php database manager
 * Deltares, Matthijs Schaap, 4-2018
 * saves documents from form
-* adds documents to database
-* queries database for documents with area
+* sends email with form data also link with base64 encoded form data
+* gets base64 form data and documents to database
+* queries database for documents with request area parameter
 */
 
-if(isset($_POST['submit'])){
+if(isset($_POST)){
 
     $db = new Dbase;
     $postData = $_POST;
     $uploadDir = "D:/Applications/Webserver/Apache24/htdocs/verzilting/files/";
     $tmp_dir = ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir();
-        
+
     //save document
-    if ( 0 < $_FILES['document']['error'] ) {
-        if(!isset ($_FILES['document']["name"]))
-        {
-            throw new Exception("No File uploaded");
-        }
+    if(! isset($_FILES['document']) || !isset ($_FILES['document']["name"]))
+    {
+        throw new Exception("No File uploaded");
+    }
+    if (0 < $_FILES['document']['error'] ) 
+    {
+
         throw new Exception('Failed with error code ' . $_FILES['document']['error']);
     }
     
@@ -37,13 +40,60 @@ if(isset($_POST['submit'])){
        $fileType != "pptx") {
         throw new Exception("You tried to upload a ".$fileType."-file. Only DOC, DOCX, PDF, PPT & PPTX files are allowed");
     }
-    
+        
     //should move uploaded file, but since that does not work, we use copy
     $checkMoved = copy( $tmp_dir.'/'. basename($_FILES["document"]["tmp_name"]),  $uploadDir . $target_fileName);
+    
     if ($checkMoved){
-         $postData["type"] = $fileType;
-        //add to database    
-        $db -> sqlite_addDocumentToDb($postData, "files/" . $target_fileName);
+        $postData["type"] = $fileType;
+        $postData["url"] = "files/" . $target_fileName;
+        
+        
+        if( isset($postData["pass"]) && $postData["pass"] == "VerZilting159945Deltares")
+        {
+            //add to database    
+            $db -> sqlite_addDocumentToDb($postData, "files/" . $target_fileName);
+        }
+        else
+        {
+            //mail to admin
+            $postData["pass"] = "VerZilting159945Deltares";
+
+            $base64FormData = rtrim( strtr( base64_encode( json_encode($postData) ), '+/', '-_'), '=');
+            //we will send and email with the form data plain to check and link with encrypted data to click to enter into database
+
+            $to      = 'shp@deltares.nl, Willem.Stolte@deltares.nl';
+            $subject = 'Verzilting app: Nieuwe upload';
+            $message = 'Beste Admin'. "\r\n"
+                . "Er is een nieuwe upload klaar voor inspectie. Hieronder ziet u een overzicht van de informatie in deze upload:" . "\r\n" 
+                . "\r\n" 
+                . "Uploader: ". $postData['creator'] . "\r\n" 
+                . "Organisatie: ". $postData['organisation'] . "\r\n" 
+                . "Titel: ". $postData['title'] . "\r\n" 
+                . "Auteur: ". $postData['author'] . "\r\n" 
+                . "Samenvatting: ". $postData['abstract'] . "\r\n" 
+                . "Projectnaam: ". $postData['project'] . "\r\n" 
+                . "Type: ". $postData['type'] . "\r\n" 
+                . "Waterlichaam id: ". $postData['waterbody'] . "\r\n" 
+                . "Document: " ."files/" . $postData['url'] . "\r\n" 
+                . "\r\n" 
+                . "If this information is correct, please click here: http://d01518:8080/verzilting/upload/index.html?data=".$base64FormData. "\r\n" 
+                . "\r\n" 
+                . "Until the above information has been submitted, it will not be available to users.";
+
+            $headers = 'From: fileuploader@deltares.nl' . "\r\n" .
+            'Reply-To: noreply@deltares.nl' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+            echo $message;
+            echo $subject;
+            echo $to;
+            echo $headers;
+            echo "\r\n";
+            echo $base64FormData;
+
+            mail($to, $subject, $message, $headers);
+        }
     }
     else
     {
@@ -115,25 +165,13 @@ class Dbase {
     //entries by area
     public function sqlite_fetchEntiesByArea($areaID)
     {
-        $query = "SELECT * FROM ".$this->tableName." WHERE Waterbody='". $areaID ."'";
+        $query = "SELECT * FROM ".$this->tableName." WHERE instr(Waterbody, '". $areaID ."') > 0";
         $result = $this ->sqlite_query($query);
         
         $entries = array();
 
         $result->setFetchMode(PDO::FETCH_ASSOC);
-/*
-        while ($row = $result->fetch()) {
-
-            extract($row);
-            $entries[] = array(
-                "title" -> $row["Title"],
-                "author" -> $row["Author"],
-                "link" -> $row["Link"],
-                "project" -> $row["Project"],
-            );
-        }
- */       
-        
+    
         return $result->fetchAll();
     }
 

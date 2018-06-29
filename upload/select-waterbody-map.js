@@ -24,7 +24,7 @@ if (mapboxgl.supported()){
       'type': 'fill',
       'source': {
         'type': 'geojson',
-        'data': './waterlichamen_43260.geojson'
+        'data': '../waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {
@@ -38,7 +38,7 @@ if (mapboxgl.supported()){
       'type': 'line',
       'source': {
         'type': 'geojson',
-        'data': './waterlichamen_43260.geojson'
+        'data': '../waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {

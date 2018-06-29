@@ -1,19 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<html lang="en"> 
-<head> 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
-    <title>Verzilting document upload</title> 
-    
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Verzilting document upload</title>
+
     <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous">
     </script>
-
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
-    <!-- script
-        src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js">
-    </script -->
     <link href="form.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css'/>
@@ -47,8 +43,8 @@
             });
         });
     </script>
-</head> 
-<body> 
+</head>
+<body>
     <form id="document_upload" action="../php/verzilting.php" method="POST">
     <fieldset id="document">
         <h2>Upload uw document</h2>
@@ -72,8 +68,11 @@
         <label for="waterbody">Waterlichaam connectie</label>
         <div id="select-waterbody-map">
           <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+          <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+          <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
           <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
           <script src='select-waterbody-map.js'></script>
+          <script src='select-waterbody-map-IE.js'></script>
         </div>
         <input hidden name="waterbody">
         <label for="document">Upload document</label>

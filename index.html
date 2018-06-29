@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Verziltingstool</title>
+  <title>Verziltingsbibliotheek</title>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+  <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' />
@@ -18,7 +18,7 @@
 
 <body>
   <header>
-    <h3 id='title'>Verziltingstool</h3>
+    <h3 id='title'>Verziltingsbibliotheek</h3>
     <button id='uploadbutton' title="Upload your document here" onclick="window.open('http://al-ng033.xtr.deltares.nl/verzilting/upload/', '_blank')" class='btn'>
      <i class='fa fa-upload'></i>
    </button>
@@ -33,6 +33,7 @@
   </header>
   <div id='map'>
     <script src='js/mapcomponent.js'></script>
+    <script src='js/mapcomponentIE.js'></script>
     <div id='documents'>
       <h3 id='document-title'> </h3>
       <div id='results'></div>

@@ -22,10 +22,10 @@
         }
 
         $(document).ready( function() {
-            
+
             var url = new URL(window.location);
             var formData = url.searchParams.get("data");
-            
+
             if (formData && formData.length > 0)
             {
                 var json = JSON.parse(atob(formData));
@@ -33,24 +33,24 @@
                 {
                     $('#document_upload input[name='+name+']').val(json[name]);
                 }
-                
+
                 $('#document_upload input[name=document_url]').val(json['url']);
                 $('#file_upload_input').hide();
                 $('#file_upload_url').show();
                 console.log(json);
             }
-                        
+
             $('#document_upload').submit(function(evt) {
                 evt.preventDefault();
-                
+
                 var formContent = new FormData(this);
                 var formAction = $(this).attr('action');
                 var formSubmitType = $(this).attr('method');
-                
+
                 var request = new XMLHttpRequest();
                 request.open("POST", formAction);
                 request.send(formContent);
-                
+
                 request.onload = function()
                 {
                     if (request.status == 200) {
@@ -74,8 +74,8 @@
                $("form").show();
                 return false;
             })
-                                  
-        });    
+
+        });
     </script>
 </head>
 <body>
@@ -101,6 +101,7 @@
         <textarea type="textbox" name="abstract"></textarea>
         <label for="waterbody-map">Waterlichaam connectie</label>
         <div name="waterbody-map" id="select-waterbody-map">
+          <div id="tooltip-span"></div>
           <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
           <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
           <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
@@ -108,7 +109,9 @@
           <script src='select-waterbody-map.js'></script>
           <script src='select-waterbody-map-IE.js'></script>
         </div>
-        <input type="text" id="waterbody" name="waterbody" readonly style="border:none;"/>
+        <input type="text" id="waterbody" name="waterbody" readonly style="display:none;"/>
+        <textarea type="text" id="waterbody-names" readonly/></textarea>
+
         <div id="file_upload_input">
             <label for="document">Upload document</label>
             <input id="input_file" type="file" name="document">
@@ -131,7 +134,7 @@
     <div id="failed" style="display:none">
         <h2>Helaas is er iets fout gegaan in het proces.</h2>
         <p>
-            
+
         </p>
         <a href="#" id="try-again">Probeer nog een keer</a>
     </div>

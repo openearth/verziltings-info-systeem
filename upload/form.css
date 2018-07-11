@@ -87,3 +87,14 @@
           width: 100%;
           height: 50vh;
         }
+
+        #tooltip-span {
+          display: none;
+          position: fixed;
+          overflow: hidden;
+        }
+
+        #waterbody-names {
+          border: none;
+          max-width: 100%;
+        }

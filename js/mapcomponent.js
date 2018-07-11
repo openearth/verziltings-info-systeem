@@ -1,4 +1,5 @@
 if (mapboxgl.supported()){
+  const SERVER = 'http://d01518:8080/'
   const SERVER_URL = 'http://al-ng033.xtr.deltares.nl/verzilting/'
   var selectedIds = []
 
@@ -22,7 +23,7 @@ if (mapboxgl.supported()){
       'type': 'fill',
       'source': {
         'type': 'geojson',
-        'data': '../waterlichamen_43260.geojson'
+        'data': SERVER + 'verzilting/waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {
@@ -36,7 +37,7 @@ if (mapboxgl.supported()){
       'type': 'line',
       'source': {
         'type': 'geojson',
-        'data': '../waterlichamen_43260.geojson'
+        'data': SERVER + 'verzilting/waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {
@@ -49,15 +50,25 @@ if (mapboxgl.supported()){
     // Add the geocoder and navigation tools
 
     map.addControl(new mapboxgl.NavigationControl());
-
+    var tooltipSpan = document.getElementById('tooltip-span');
+    window.onmousemove = function (e) {
+        var x = e.clientX,
+            y = e.clientY;
+        tooltipSpan.style.top = (y + 20) + 'px';
+        tooltipSpan.style.left = (x + 20) + 'px';
+        tooltipSpan.style['z-index'] = '5';
+    };
     // Add functionality to show outlined polygons when hovered over
     map.on('mousemove', 'waterbodies', function(e) {
       map.setFilter('waterbodies-outline', ['in', 'OWMIDENT'].concat(selectedIds).concat(e.features[0].properties.OWMIDENT))
       map.getCanvas().style.cursor = 'pointer'
+      tooltipSpan.style.display = 'block'
+      tooltipSpan.innerHTML = e.features[0].properties.OWMNAAM
     })
     map.on('mouseleave', 'waterbodies', function(e) {
       map.setFilter('waterbodies-outline', ['in', 'OWMIDENT'].concat(selectedIds))
       map.getCanvas().style.cursor = ''
+      tooltipSpan.style.display = 'none'
     })
 
     map.on('click', 'waterbodies', function(e) {
@@ -90,16 +101,21 @@ if (mapboxgl.supported()){
           }
         }).done(function(data) {
           var documents = JSON.parse(data);
-
+          // sort document list to date
+          documents = documents.sort(function(a, b) {
+              a = new Date(Number(a.Date));
+              b = new Date(Number(b.Date));
+              return a>b ? -1 : a<b ? 1 : 0;
+          });
           var t = $("#results").empty()
           $('#document-title').html("Documenten voor waterlichaam: " + owmnaam)
+
           $.each(documents, function(ind, val) {
-            var d = new Date(Number(val.Date));
-            var year = d.getFullYear();
+            var dt = new Date(Number(val.Date));
             $("<button class='collapsible'> <i>" + val.Title + "</i> by: " + val.Authors + "</button> \
                 <div class='content'> \
                   <p> <u> Abstract:</u>" + val.Abstract + " <br> \
-                  <u> Jaar:</u> " + year + " <br> \
+                  <u> Datum:</u> " + dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate() + " <br> \
                   <u> Organisation:</u> " + val.Organisation + " </p> \
                   <button onclick='window.open(&quot;" + SERVER_URL + val.Link + "&quot;, &quot;_blank&quot;)' class='btn'><i class='fa fa-file'></i></button> \
                 </div>").appendTo(t)

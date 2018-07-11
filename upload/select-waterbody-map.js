@@ -1,8 +1,10 @@
 console.log(mapboxgl.supported())
 
 if (mapboxgl.supported()){
+  const SERVER = 'http://d01518:8080/'
   const SERVER_URL = 'http://al-ng033.xtr.deltares.nl/verzilting/'
   var selectedIds = []
+  var selectedNames = []
 
   // create mapbox component
   mapboxgl.accessToken = 'pk.eyJ1IjoiY2FtdmR2cmllcyIsImEiOiJjajA4NXdpNmswMDB2MzNzMjk4dGM2cnhzIn0.lIwd8N7wf0hx7mq-kjTcbQ';
@@ -24,7 +26,7 @@ if (mapboxgl.supported()){
       'type': 'fill',
       'source': {
         'type': 'geojson',
-        'data': '../waterlichamen_43260.geojson'
+        'data': SERVER + 'verzilting/waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {
@@ -38,7 +40,7 @@ if (mapboxgl.supported()){
       'type': 'line',
       'source': {
         'type': 'geojson',
-        'data': '../waterlichamen_43260.geojson'
+        'data': SERVER + 'verzilting/waterlichamen_43260.geojson'
       },
       'layout': {},
       'paint': {
@@ -49,32 +51,45 @@ if (mapboxgl.supported()){
     });
 
     // Add the geocoder and navigation tools
-    map.addControl(new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken
-    }));
     map.addControl(new mapboxgl.NavigationControl());
-
+    var tooltipSpan = document.getElementById('tooltip-span');
+    window.onmousemove = function (e) {
+        var x = e.clientX,
+            y = e.clientY;
+        tooltipSpan.style.top = (y + 20) + 'px';
+        tooltipSpan.style.left = (x + 20) + 'px';
+        tooltipSpan.style['z-index'] = '5';
+    };
     // Add functionality to show outlined polygons when hovered over
     map.on('mousemove', 'waterbodies', function (e) {
-      map.setFilter('waterbodies-outline', ['in', 'owmident'].concat(selectedIds).concat(e.features[0].properties.owmident))
+      map.setFilter('waterbodies-outline', ['in', 'OWMIDENT'].concat(selectedIds).concat(e.features[0].properties.OWMIDENT))
       map.getCanvas().style.cursor = 'pointer'
+      tooltipSpan.style.display = 'block'
+      tooltipSpan.innerHTML = e.features[0].properties.OWMNAAM
     })
 
     map.on('mouseleave', 'waterbodies', function (e) {
-      map.setFilter('waterbodies-outline', ['in', 'owmident'].concat(selectedIds))
+      map.setFilter('waterbodies-outline', ['in', 'OWMIDENT'].concat(selectedIds))
       map.getCanvas().style.cursor = ''
+      tooltipSpan.style.display = 'none'
     })
 
     map.on('click', 'waterbodies', function (e) {
       var features = map.queryRenderedFeatures(e.point);
-      var waterbodyId = e.features[0].properties.owmident
+      var waterbodyId = e.features[0].properties.OWMIDENT
+      var waterbodyName = e.features[0].properties.OWMNAAM
       if ($.inArray(waterbodyId, selectedIds) === -1) {
         selectedIds.push(waterbodyId)
+        selectedNames.push(waterbodyName)
       } else if ($.inArray(waterbodyId, selectedIds) !== -1) {
         selectedIds.splice($.inArray(waterbodyId, selectedIds), 1);
+        selectedNames.splice($.inArray(waterbodyName, selectedNames), 1);
       }
-      map.setFilter('waterbodies-outline', ['in', 'owmident'].concat(selectedIds))
+      map.setFilter('waterbodies-outline', ['in', 'OWMIDENT'].concat(selectedIds))
+      // NOTE: added field to show selectedNames
       document.getElementById("waterbody").value = selectedIds
+      document.getElementById("waterbody-names").value = selectedNames
+
     })
   });
 }

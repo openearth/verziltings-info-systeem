@@ -1,14 +1,14 @@
-body {
+body{
   margin: 0;
   padding: 0;
+  border: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 #map {
-  position: inherit;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 95vh;
+  width: 100vw;
+  height: calc(100% - 5vh);
 }
 
 #documents {
@@ -114,6 +114,11 @@ header {
 }
 
 .mapboxgl-ctrl-top-right {
-  position: absolute !important;
   top: 8vh !important;
+}
+
+#tooltip-span {
+  display: none;
+  position: fixed;
+  overflow: hidden;
 }

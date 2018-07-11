@@ -1,4 +1,5 @@
 if (!mapboxgl.supported()){
+  const SERVER = 'http://d01518:8080/'
   const SERVER_URL = 'http://al-ng033.xtr.deltares.nl/verzilting/'
   var selectedIds = []
 
@@ -13,7 +14,7 @@ if (!mapboxgl.supported()){
   style.on('ready', function(e) {
     var waterbodies = L.mapbox.featureLayer().addTo(map);
     var waterbodiesoutline = L.mapbox.featureLayer().addTo(map);
-    $.getJSON('../waterlichamen_43260.geojson', function(data) {
+    $.getJSON(SERVER + 'verzilting/waterlichamen_43260.geojson', function(data) {
 
 
           waterbodiesoutline.setGeoJSON(data)
@@ -24,7 +25,7 @@ if (!mapboxgl.supported()){
             }
           )
           waterbodiesoutline.setFilter(function(feature) {
-            return (feature.properties.owmident === 'all')
+            return (feature.properties.OWMIDENT === 'all')
           })
           waterbodies.setGeoJSON(data)
           waterbodies.setStyle(
@@ -35,26 +36,38 @@ if (!mapboxgl.supported()){
             }
           )
     })
+    var tooltipSpan = document.getElementById('tooltip-span');
+    window.onmousemove = function (e) {
+        var x = e.clientX,
+            y = e.clientY;
+        tooltipSpan.style.top = (y + 20) + 'px';
+        tooltipSpan.style.left = (x + 20) + 'px';
+        tooltipSpan.style['z-index'] = '5';
+    };
 
     // Add functionality to show outlined polygons when hovered over
     waterbodies.on('mouseover', function(e) {
       waterbodiesoutline.setFilter(function(feature) {
-        return ($.inArray(feature.properties.owmident, selectedIds.concat(e.layer.feature.properties.owmident)) !== -1)
+        return ($.inArray(feature.properties.OWMIDENT, selectedIds.concat(e.layer.feature.properties.OWMIDENT)) !== -1)
       })
+      tooltipSpan.style.display = 'block'
+      tooltipSpan.innerHTML = e.layer.feature.properties.OWMNAAM
     })
+
     waterbodiesoutline.on('mouseout', function(e) {
       waterbodiesoutline.setFilter(function(feature) {
-        return ($.inArray(feature.properties.owmident, selectedIds) !== -1)
+        return ($.inArray(feature.properties.OWMIDENT, selectedIds) !== -1)
       })
+      tooltipSpan.style.display = 'none'
     })
 
     waterbodiesoutline.on('click', function(e) {
-      var waterbodyId = e.layer.feature.properties.owmident
+      var waterbodyId = e.layer.feature.properties.OWMIDENT
       if ($.inArray(waterbodyId, selectedIds) === -1) {
         selectedIds = []
         selectedIds.push(waterbodyId)
         waterbodiesoutline.setFilter(function(feature) {
-          return ($.inArray(feature.properties.owmident, selectedIds) !== -1)
+          return ($.inArray(feature.properties.OWMIDENT, selectedIds) !== -1)
         })
         document.getElementById("documents").style.display = "block";
       } else if ($.inArray(waterbodyId, selectedIds) !== -1) {
@@ -80,7 +93,7 @@ if (!mapboxgl.supported()){
           var documents = JSON.parse(data);
 
           var t = $("#results").empty()
-          $('#document-title').html("Documenten voor waterlichaam: " + e.layer.feature.properties.owmnaam)
+          $('#document-title').html("Documenten voor waterlichaam: " + e.layer.feature.properties.OWMNAAM)
           $.each(documents, function(ind, val) {
             var d = new Date(Number(val.Date));
             var year = d.getFullYear();
